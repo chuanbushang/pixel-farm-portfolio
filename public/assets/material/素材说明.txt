@@ -1,0 +1,20 @@
+【素材存放说明 · material 图片素材】
+
+这个文件夹用来存放网站页面里要展示的图片素材：
+- 项目封面图 / 项目详情图
+- 爱好照片（摄影、音乐、美食、电影）
+- 荣誉证书照片
+- 经历配图
+
+命名规范：
+1. 英文小写 + 数字，用连字符分隔，例如：
+   egg-fried-rice-1.jpg
+   photo-sunset-01.jpg
+   cert-sheqing-2025.jpg
+2. 支持 jpg / png / webp
+
+挂载方法：
+把图片放进本文件夹后，告诉 AI 文件名和想挂到哪一张卡片，
+AI 会把路径写进 src/data/profile.ts 对应条目的 images 数组里。
+
+（路径写法示例：/assets/material/egg-fried-rice-1.jpg）

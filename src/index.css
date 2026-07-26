@@ -1,0 +1,318 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.625rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+/* ============================================================
+   星露谷像素风主题
+   ============================================================ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* 像素字体：中文用缝合像素，英文标题用 Press Start 2P */
+.font-pixel {
+  font-family: 'Fusion Pixel 12px Proportional SC', 'Press Start 2P', sans-serif;
+}
+.font-pixel-en {
+  font-family: 'Press Start 2P', 'Fusion Pixel 12px Proportional SC', monospace;
+}
+
+/* 星露谷对话框：米白底 + 像素阶梯描边 */
+.pixel-box {
+  background: #f9e7bd;
+  border-radius: 0;
+  box-shadow:
+    0 -4px 0 0 #6b4423,
+    0 4px 0 0 #6b4423,
+    -4px 0 0 0 #6b4423,
+    4px 0 0 0 #6b4423,
+    inset 0 0 0 3px #e8c284;
+}
+
+/* 像素按钮 */
+.pixel-btn {
+  background: #f9e7bd;
+  border-radius: 0;
+  box-shadow:
+    0 -3px 0 0 #6b4423,
+    0 3px 0 0 #6b4423,
+    -3px 0 0 0 #6b4423,
+    3px 0 0 0 #6b4423;
+  transition: transform 0.05s steps(2), filter 0.05s;
+}
+.pixel-btn:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+.pixel-btn:active {
+  filter: brightness(0.95);
+  transform: translateY(2px);
+}
+
+/* 闪烁（PRESS START / 光标） */
+@keyframes px-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+.animate-blink {
+  animation: px-blink 1.1s steps(1) infinite;
+}
+
+/* 上下浮动（太阳、头像） */
+@keyframes px-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-bob {
+  animation: px-bob 1.6s steps(2) infinite;
+}
+
+/* 云朵飘移 */
+@keyframes px-drift {
+  from { transform: translateX(-25vw); }
+  to { transform: translateX(115vw); }
+}
+.animate-drift {
+  animation-name: px-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* 向下跳动（滚动提示箭头） */
+@keyframes px-hop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.animate-hop {
+  animation: px-hop 0.8s steps(2) infinite;
+}
+
+/* 音乐均衡器小条 */
+@keyframes px-eq {
+  0%, 100% { height: 4px; }
+  50% { height: 16px; }
+}
+.animate-eq {
+  animation: px-eq 0.7s steps(3) infinite;
+  height: 4px;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+/* 星露谷木牌（标题大招牌） */
+.wood-sign {
+  background: repeating-linear-gradient(0deg, #e2a866 0 12px, #d89b58 12px 24px);
+  border-radius: 0;
+  box-shadow:
+    0 -6px 0 0 #8a5a2e,
+    0 6px 0 0 #8a5a2e,
+    -6px 0 0 0 #8a5a2e,
+    6px 0 0 0 #8a5a2e,
+    inset 0 0 0 4px #f3cd8f,
+    inset 0 0 0 8px rgba(138, 90, 46, 0.35),
+    0 10px 0 0 rgba(0, 0, 0, 0.25);
+}
+
+/* 星露谷 textBox 对话框（原版贴图 4x，九宫格切分不变形） */
+.stardew-textbox {
+  background: transparent;
+  border-style: solid;
+  border-width: 12px;
+  border-image: url('/assets/icons/ui/textBox-4x.png') 48 fill stretch;
+}
+
+/* 标题牌木板纹理（TitleButtons 原版木头条平铺） */
+.title-wood {
+  background: url('/assets/icons/ui/title-wood-4x.png') repeat;
+  border-radius: 0;
+  box-shadow:
+    0 -6px 0 0 #8a5a2e,
+    0 6px 0 0 #8a5a2e,
+    -6px 0 0 0 #8a5a2e,
+    6px 0 0 0 #8a5a2e,
+    inset 0 0 0 4px #f3cd8f,
+    inset 0 0 0 8px rgba(138, 90, 46, 0.35),
+    0 10px 0 0 rgba(0, 0, 0, 0.25);
+}
+
+/* 肖像面板（TitleButtons 木纹 + 木框） */
+.portrait-panel {
+  background: url('/assets/icons/ui/title-wood-4x.png') repeat;
+  border-radius: 0;
+  box-shadow:
+    0 -4px 0 0 #8a5a2e,
+    0 4px 0 0 #8a5a2e,
+    -4px 0 0 0 #8a5a2e,
+    4px 0 0 0 #8a5a2e,
+    inset 0 0 0 3px #f3cd8f,
+    0 8px 0 0 rgba(0, 0, 0, 0.25);
+}
+
+/* 星露谷木头按钮（UiButtons 原版横向按钮贴图 4x，按内容自适应拉伸） */
+.wood-btn {
+  background: transparent;
+  border-style: solid;
+  border-width: 10px 14px;
+  border-image: url('/assets/icons/ui/button.png') 20 fill stretch;
+  border-radius: 0;
+  transition: transform 0.06s steps(2), filter 0.06s;
+}
+.wood-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+.wood-btn:active {
+  filter: brightness(0.95);
+  transform: translateY(2px);
+}
+
+/* 小尺寸木质图标框（与 wood-btn 同款 button 贴图，边框等比缩小适配 56px 小框） */
+.wood-icon {
+  background: transparent;
+  border-style: solid;
+  border-width: 8px;
+  border-image: url('/assets/icons/ui/button.png') 20 fill stretch;
+  border-radius: 0;
+}
+
+/* 星星闪烁 */
+@keyframes px-twinkle {
+  0%, 60% { opacity: 0.9; }
+  70%, 100% { opacity: 0.15; }
+}
+.animate-twinkle {
+  animation: px-twinkle 2.4s steps(2) infinite;
+}
+
+/* 季节飘落物（花瓣 / 落叶 / 雪花） */
+@keyframes px-fall {
+  0% { transform: translate(0, -5vh) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.9; }
+  100% { transform: translate(6vw, 105vh) rotate(180deg); opacity: 0.7; }
+}
+.animate-fall {
+  animation-name: px-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* 蝴蝶扇翅 */
+@keyframes px-flap {
+  0%, 100% { transform: scaleX(1); }
+  50% { transform: scaleX(0.55); }
+}
+.animate-flap {
+  animation: px-flap 0.5s steps(2) infinite;
+}
+
+/* 蝴蝶贴图扇翅：3 帧精灵图循环（展翅→半收→收拢→半收→展翅） */
+@keyframes px-sprite-flap {
+  0% { background-position: 0% 0; }
+  25% { background-position: 50% 0; }
+  50% { background-position: 100% 0; }
+  75% { background-position: 50% 0; }
+  100% { background-position: 0% 0; }
+}
+.animate-sprite-flap {
+  animation: px-sprite-flap 0.64s step-end infinite;
+}
+
+/* 动物贴图 2 帧循环（吃草/踱步） */@keyframes px-frames2 {
+  0% { background-position: 0% 0; }
+  50% { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
+}
+.animate-frames2 {
+  animation: px-frames2 0.9s step-end infinite;
+}
+
+/* dogsmile 7 帧循环（开发中卡片角落装饰，约 7fps） */
+@keyframes px-frames7 {
+  0% { background-position: 0% 0; }
+  14.3% { background-position: 16.7% 0; }
+  28.6% { background-position: 33.3% 0; }
+  42.9% { background-position: 50% 0; }
+  57.1% { background-position: 66.7% 0; }
+  71.4% { background-position: 83.3% 0; }
+  85.7% { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
+}
+.animate-frames7 {
+  animation: px-frames7 1.05s step-end infinite;
+}

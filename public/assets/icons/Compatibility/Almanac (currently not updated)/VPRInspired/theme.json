@@ -1,0 +1,7 @@
+{
+	"$schema": "https://raw.githubusercontent.com/KhloeLeclair/StardewMods/main/Almanac/theme-schema.json",
+	"Name": "VPR-Inspired UI",
+	"For": [
+		"Dora.VPRUI"
+	]
+}
