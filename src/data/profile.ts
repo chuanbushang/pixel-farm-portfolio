@@ -164,7 +164,7 @@ export const experience: ExperienceItem[] = [
       '信息检索与服务：日均接待师生档案查询咨询 10+ 次，准确理解需求并快速定位信息',
       '文档管理与归档：协助完成档案寄送、调阅等跨部门事务，熟悉文件归档流程与行政辅助工作',
     ],
-    images: [],
+    images: ['/assets/material/experience/qgzx.png'],
   },
   {
     period: '2025.06 - 至今',
