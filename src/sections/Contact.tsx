@@ -28,9 +28,6 @@ export default function Contact() {
         <a href="/assets/docs/resume.pdf" download className="wood-btn inline-block px-4 py-2">
           下载简历 ↓
         </a>
-        <p className="font-pixel mt-2 text-xs text-[#8b5a2b]">
-          （把 resume.pdf 放进 public/assets/docs/ 即可生效）
-        </p>
       </div>
     </SeasonalBox>
   )

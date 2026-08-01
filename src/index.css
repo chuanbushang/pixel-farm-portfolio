@@ -132,6 +132,15 @@
   animation: px-blink 1.1s steps(1) infinite;
 }
 
+/* 呼吸缩放（音乐提示小红点） */
+@keyframes px-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.5); }
+}
+.animate-breathe {
+  animation: px-breathe 1.2s ease-in-out infinite;
+}
+
 /* 上下浮动（太阳、头像） */
 @keyframes px-bob {
   0%, 100% { transform: translateY(0); }

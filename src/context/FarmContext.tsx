@@ -27,6 +27,27 @@ export function FarmProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem(STORAGE_KEY, season)
   }, [season])
 
+  // 进网站自动播放音乐：先直接尝试；被浏览器拦截则等首次点击/按键时补播（一次性）
+  useEffect(() => {
+    let cancelled = false
+    const onGesture = () => {
+      window.removeEventListener('pointerdown', onGesture)
+      window.removeEventListener('keydown', onGesture)
+      if (!cancelled) void music.play().catch(() => {})
+    }
+    void music.tryAutoplay().then((ok) => {
+      if (cancelled || ok) return
+      window.addEventListener('pointerdown', onGesture)
+      window.addEventListener('keydown', onGesture)
+    })
+    return () => {
+      cancelled = true
+      window.removeEventListener('pointerdown', onGesture)
+      window.removeEventListener('keydown', onGesture)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <FarmContext.Provider value={{ season, cfg: SEASONS[season], setSeason, music }}>
       {children}

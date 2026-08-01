@@ -17,6 +17,7 @@ export default function Experience() {
             brief={item.brief}
             detail={item.detail}
             images={item.images}
+            coverPos={item.coverPos}
           />
         ))}
       </div>

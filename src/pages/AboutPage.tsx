@@ -21,9 +21,7 @@ export default function AboutPage() {
           style={grassBackground(cfg)}
         >
           <p className="font-pixel text-sm text-[#2f5d33]">© 2026 {profile.farmName}</p>
-          <p className="font-pixel text-xs text-[#4a7a4e]">
-            用 ❤ 和像素手工制作 · 把音乐命名为 bgm-spring.mp3 等放进 public/ 可替换对应季节 BGM
-          </p>
+          <p className="font-pixel text-xs text-[#4a7a4e]">用 ❤ 和像素手工制作</p>
         </div>
       </footer>
     </>

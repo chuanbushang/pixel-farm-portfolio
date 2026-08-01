@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import PixelArt from './PixelArt'
+import SpriteAnim, { type SpriteAnimSpec } from './SpriteAnim'
 
 interface ExpandableItemProps {
   title: string
@@ -13,7 +15,10 @@ interface ExpandableItemProps {
   images?: string[] // public/assets/material/ 下的图片路径
   imageHint?: string // 无图时的占位提示
   hideCover?: boolean // 不显示封面区（如「开发中」占位卡）
-  cornerSprite?: string // 右下角 7 帧动图装饰（50px，如 dogsmile-7.png）
+  noExpand?: boolean // 封面纯展示，不可点击展开详情
+  coverContain?: boolean // 封面始终完整显示原构图（不裁切，横竖版一致）
+  coverPos?: string // 封面裁切取景位置（CSS object-position，如 'bottom' 取最下方）
+  cornerAnim?: SpriteAnimSpec // 右下角逐帧动图装饰
 }
 
 /**
@@ -32,9 +37,13 @@ export default function ExpandableItem({
   images,
   imageHint,
   hideCover,
-  cornerSprite,
+  noExpand,
+  coverContain,
+  coverPos,
+  cornerAnim,
 }: ExpandableItemProps) {
   const [open, setOpen] = useState(false)
+  const [zoomOpen, setZoomOpen] = useState(false) // 灯箱：浮层查看原图
   const [coverPortrait, setCoverPortrait] = useState(false) // 封面为竖版图时完整展示
   const [imgIdx, setImgIdx] = useState(0) // 轮播当前张
   const [pauseUntil, setPauseUntil] = useState(0) // 交互后暂停自动轮换到此时间戳
@@ -42,16 +51,29 @@ export default function ExpandableItem({
   const hasImages = images && images.length > 0
   const multi = hasImages && images!.length > 1
 
-  // 无交互时以 2.5s/张 自动轮换（封面同步变化）；悬停或手动切换后暂停，4s 无操作恢复
+  // 灯箱打开时：Esc 关闭、多图时 ← → 切换
   useEffect(() => {
-    if (!multi) return
+    if (!zoomOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setZoomOpen(false)
+      if (!multi) return
+      if (e.key === 'ArrowLeft') manualSwitch(imgIdx - 1)
+      if (e.key === 'ArrowRight') manualSwitch(imgIdx + 1)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [zoomOpen, imgIdx, multi, images])
+
+  // 点开详情后才以 2.5s/张 自动轮换（封面同步变化）；灯箱打开时停止自动轮换防闪屏；悬停或手动切换后暂停，4s 无操作恢复
+  useEffect(() => {
+    if (!open || !multi || zoomOpen) return
     const t = setInterval(() => {
       if (!hovering && Date.now() >= pauseUntil) {
         setImgIdx((i) => (i + 1) % images!.length)
       }
     }, 2500)
     return () => clearInterval(t)
-  }, [multi, hovering, pauseUntil, images])
+  }, [open, multi, zoomOpen, hovering, pauseUntil, images])
 
   const manualSwitch = (next: number) => {
     setImgIdx((next + images!.length) % images!.length)
@@ -76,16 +98,16 @@ export default function ExpandableItem({
             <h3 className="font-pixel origin-left text-lg text-[#3b2a1a] transition-all group-hover:scale-[1.03] group-hover:text-[#b0514a]">
               {title}
             </h3>
-            {tag && (
-              <span className="border-2 border-[#8b5a2b] bg-[#f9e7bd] px-2 py-0.5 font-pixel text-xs text-[#6b4423]">
-                {tag}
-              </span>
-            )}
           </div>
+          {tag && (
+            <span className="mt-1 inline-block border-2 border-[#8b5a2b] bg-[#f9e7bd] px-2 py-0.5 font-pixel text-xs text-[#6b4423]">
+              {tag}
+            </span>
+          )}
           {brief && <p className="font-pixel mt-1 text-sm leading-relaxed text-[#5a4632]">{brief}</p>}
           {tech && tech.length > 0 && (
             <p className="font-pixel mt-1 text-xs text-[#8b5a2b]">
-              备注：{tech.map((t) => `「${t}」`).join(' ')}
+              {tech.map((t) => `「${t}」`).join(' ')}
             </p>
           )}
         </div>
@@ -96,42 +118,43 @@ export default function ExpandableItem({
         )}
       </div>
 
-      {/* 封面区：点击展开/收起；随轮播同步变化，悬停时暂停轮换（hideCover 时整块不渲染） */}
+      {/* 封面区：点击展开/收起；未展开时固定显示封面图，展开后随轮播同步（hideCover 时整块不渲染；noExpand 时纯展示不可点击） */}
       {!hideCover && (
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => !noExpand && setOpen((v) => !v)}
         onMouseEnter={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
-        className="relative mt-3 block w-full cursor-pointer overflow-hidden border-2 border-[#6b4423] text-left"
+        className={`relative mt-3 block w-full overflow-hidden border-2 border-[#6b4423] text-left ${noExpand ? 'cursor-default' : 'cursor-pointer'}`}
         aria-expanded={open}
       >
         {hasImages ? (
-          coverPortrait ? (
-            // 竖版封面：完整显示不裁切，加高展示位，两侧衬奶油底（与详情轮播同步）
-            <div className="flex h-72 w-full items-center justify-center bg-[#e8d9b0]">
+          coverPortrait || coverContain ? (
+            // 完整显示封面：不裁切原构图（竖版自动 / coverContain 强制），两侧衬奶油底
+            <div className="flex h-96 w-full items-center justify-center bg-[#e8d9b0]">
               <img
-                key={images![imgIdx]}
-                src={images![imgIdx]}
+                key={open ? images![imgIdx] : images![0]}
+                src={open ? images![imgIdx] : images![0]}
                 alt={title}
                 onLoad={(e) => {
                   const img = e.currentTarget
                   setCoverPortrait(img.naturalHeight > img.naturalWidth)
                 }}
-                className="h-full w-auto object-contain transition-all group-hover:scale-105 group-hover:opacity-50"
+                className={`h-full w-auto max-w-full object-contain ${noExpand ? '' : 'transition-all group-hover:scale-105 group-hover:opacity-50'}`}
               />
             </div>
           ) : (
-            // 横版封面：铺满裁切（与详情轮播同步）
+            // 横版封面：铺满裁切（coverPos 可指定取景位置，如 bottom 取最下方）
             <img
-              key={images![imgIdx]}
-              src={images![imgIdx]}
+              key={open ? images![imgIdx] : images![0]}
+              src={open ? images![imgIdx] : images![0]}
               alt={title}
               onLoad={(e) => {
                 const img = e.currentTarget
                 setCoverPortrait(img.naturalHeight > img.naturalWidth)
               }}
-              className="h-40 w-full object-cover transition-all group-hover:scale-105 group-hover:opacity-50"
+              style={coverPos ? { objectPosition: coverPos } : undefined}
+              className={`h-64 w-full object-cover ${noExpand ? '' : 'transition-all group-hover:scale-105 group-hover:opacity-50'}`}
             />
           )
         ) : (
@@ -139,25 +162,19 @@ export default function ExpandableItem({
             封面图待上传
           </div>
         )}
+        {!noExpand && (
         <span className="absolute inset-0 flex items-center justify-center font-pixel text-sm text-[#3b2a1a] opacity-0 transition-opacity group-hover:opacity-100">
           {open ? '▲ 点击收起详情' : '▼ 点击展开详情'}
         </span>
+        )}
       </button>
       )}
 
-      {/* 右下角 7 帧动图装饰（如 dogsmile，50px） */}
-      {cornerSprite && (
-        <div
-          className="animate-frames7 pointer-events-none absolute bottom-2 right-2"
-          aria-hidden
-          style={{
-            width: 50,
-            height: 53,
-            backgroundImage: `url(${cornerSprite})`,
-            backgroundSize: '700% 100%',
-            imageRendering: 'pixelated',
-          }}
-        />
+      {/* 右下角逐帧动图装饰（角色 / dogsmile） */}
+      {cornerAnim && (
+        <div className="pointer-events-none absolute bottom-2 right-2">
+          <SpriteAnim {...cornerAnim} />
+        </div>
       )}
 
       {/* 展开详情区 */}
@@ -189,11 +206,13 @@ export default function ExpandableItem({
                   ◀
                 </button>
               )}
-              <div className="relative flex h-56 min-w-0 flex-1 items-center justify-center border-2 border-[#6b4423] bg-[#e8d9b0]">
+              <div className="relative flex h-80 min-w-0 flex-1 items-center justify-center border-2 border-[#6b4423] bg-[#e8d9b0]">
                 <img
                   src={images![imgIdx]}
                   alt={`${title} 图 ${imgIdx + 1}`}
-                  className="h-full w-auto max-w-full object-contain"
+                  onClick={() => setZoomOpen(true)}
+                  title="点击查看原图"
+                  className="h-full w-auto max-w-full cursor-zoom-in object-contain transition-opacity hover:opacity-80"
                 />
                 {multi && (
                   <span className="absolute bottom-1 right-1 border-2 border-[#8b5a2b] bg-[#f9e7bd]/90 px-1.5 font-pixel text-[10px] text-[#6b4423]">
@@ -218,6 +237,57 @@ export default function ExpandableItem({
             </p>
           )}
         </div>
+      )}
+      {/* 灯箱：点击详情图后浮层查看原图；Esc / 点击背景 / ✕ 关闭，多图可 ◀ ▶ / ← → 切换。
+          必须 createPortal 到 body：卡片 article 悬停带 transform，会把 fixed 灯箱困进卡片层叠上下文导致闪烁 */}
+      {zoomOpen && hasImages && createPortal(
+        <div
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 p-6"
+          onClick={() => setZoomOpen(false)}
+        >
+          <img
+            src={images![imgIdx]}
+            alt={`${title} 原图 ${imgIdx + 1}`}
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-full max-w-full border-4 border-[#6b4423] bg-[#e8d9b0] object-contain"
+          />
+          <button
+            type="button"
+            onClick={() => setZoomOpen(false)}
+            className="absolute right-4 top-4 cursor-pointer border-2 border-[#6b4423] bg-[#f9e7bd] p-1.5 transition-transform hover:scale-110"
+            aria-label="关闭"
+          >
+            <img
+              src="/assets/icons/ui/Ui-xx.png"
+              alt="关闭"
+              style={{ width: 28, height: 28, imageRendering: 'pixelated' }}
+            />
+          </button>
+          {multi && (
+            <>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); manualSwitch(imgIdx - 1) }}
+                className="wood-btn absolute left-4 top-1/2 -translate-y-1/2 cursor-pointer px-3 py-2 font-pixel text-lg text-[#5a3a1e]"
+                aria-label="上一张"
+              >
+                ◀
+              </button>
+              <button
+                type="button"
+                onClick={(e) => { e.stopPropagation(); manualSwitch(imgIdx + 1) }}
+                className="wood-btn absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer px-3 py-2 font-pixel text-lg text-[#5a3a1e]"
+                aria-label="下一张"
+              >
+                ▶
+              </button>
+              <span className="absolute bottom-4 left-1/2 -translate-x-1/2 border-2 border-[#8b5a2b] bg-[#f9e7bd]/90 px-2 py-0.5 font-pixel text-xs text-[#6b4423]">
+                {imgIdx + 1} / {images!.length}
+              </span>
+            </>
+          )}
+        </div>,
+        document.body
       )}
     </article>
   )

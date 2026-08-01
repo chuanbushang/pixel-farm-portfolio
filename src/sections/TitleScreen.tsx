@@ -25,6 +25,8 @@ const menu = [
 export default function TitleScreen({ onNavigate }: TitleScreenProps) {
   const { season, cfg, music } = useFarm()
   const [showMusic, setShowMusic] = useState(false)
+  // 音乐提示（attention 星标 + 闪烁文本）：每次刷新重新出现，点击音乐牌子后消失（不持久化）
+  const [musicHint, setMusicHint] = useState(true)
 
   return (
     <section
@@ -47,24 +49,46 @@ export default function TitleScreen({ onNavigate }: TitleScreenProps) {
       {/* 木头菜单按钮（第 8 块「音乐」弹出音乐设置，与「联系我」对称） */}
       <nav className="relative z-10 grid grid-cols-2 gap-5 px-4 sm:grid-cols-4 md:gap-7">
         {menu.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => (item.id === 'music' ? setShowMusic((v) => !v) : onNavigate(item.id))}
-            className="wood-btn flex w-32 flex-col items-center gap-2 px-4 py-4 md:w-36"
-            style={
-              item.id === 'music' && showMusic
-                ? { filter: 'brightness(1.15) saturate(1.2)', transform: 'translateY(2px)' }
-                : undefined
-            }
-            aria-pressed={item.id === 'music' ? showMusic : undefined}
-          >
-            <span className="font-pixel text-lg text-[#5a3a1e]">{item.label}</span>
-            {'img' in item && item.img ? (
-              <img src={item.img} alt="" style={{ width: 36, height: 36, imageRendering: 'pixelated' }} />
-            ) : (
-              <PixelArt rows={item.icon!.rows} palette={item.icon!.palette} scale={3} />
+          <div key={item.id} className="relative">
+            {/* 音乐提示：attention 星标（右上角外侧，呼吸缩放）+ 白色无背景闪烁文本，点击后消失 */}
+            {item.id === 'music' && musicHint && (
+              <>
+                <img
+                  src="/assets/icons/ui/attention.png"
+                  alt=""
+                  className="animate-breathe absolute -top-3 right-0 z-20"
+                  style={{ width: 10, height: 10, imageRendering: 'pixelated' }}
+                />
+                <span
+                  className="animate-blink font-pixel absolute -top-9 right-0 z-20 whitespace-nowrap text-xs text-white"
+                  style={{ textShadow: '1px 1px 0 #3b2a1a' }}
+                >
+                  点击此处设置音乐
+                </span>
+              </>
             )}
-          </button>
+            <button
+              onClick={() =>
+                item.id === 'music'
+                  ? (setShowMusic((v) => !v), setMusicHint(false))
+                  : onNavigate(item.id)
+              }
+              className="wood-btn flex w-32 flex-col items-center gap-2 px-4 py-4 md:w-36"
+              style={
+                item.id === 'music' && showMusic
+                  ? { filter: 'brightness(1.15) saturate(1.2)', transform: 'translateY(2px)' }
+                  : undefined
+              }
+              aria-pressed={item.id === 'music' ? showMusic : undefined}
+            >
+              <span className="font-pixel text-lg text-[#5a3a1e]">{item.label}</span>
+              {'img' in item && item.img ? (
+                <img src={item.img} alt="" style={{ width: 36, height: 36, imageRendering: 'pixelated' }} />
+              ) : (
+                <PixelArt rows={item.icon!.rows} palette={item.icon!.palette} scale={3} />
+              )}
+            </button>
+          </div>
         ))}
       </nav>
 

@@ -6,7 +6,7 @@ export default function Skills() {
   const { season } = useFarm()
   return (
     <SeasonalBox season={season} label="我的技能">
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         {profile.skills.map((cat) => (
           <article
             key={cat.category}

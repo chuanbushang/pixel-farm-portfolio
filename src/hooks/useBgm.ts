@@ -133,5 +133,26 @@ export function useBgm(season: Season) {
     setDefaultMode((prev) => !prev)
   }, [])
 
-  return { playing, play, pause, toggle, volume, setVolume, defaultMode, toggleDefaultMode }
+  // 进网站自动播放尝试：不改动 sourceRef（被浏览器拦截时保持文件源，等首次手势再正式 play）
+  const tryAutoplay = useCallback(async (): Promise<boolean> => {
+    const audio = audioRef.current
+    if (sourceRef.current === 'file' && audio && audio.src) {
+      try {
+        await audio.play()
+        setPlaying(true)
+        return true
+      } catch {
+        return false
+      }
+    }
+    try {
+      await synth.play()
+      setPlaying(true)
+      return true
+    } catch {
+      return false
+    }
+  }, [synth])
+
+  return { playing, play, pause, toggle, volume, setVolume, defaultMode, toggleDefaultMode, tryAutoplay }
 }

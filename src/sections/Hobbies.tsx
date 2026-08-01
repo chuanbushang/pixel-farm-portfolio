@@ -10,6 +10,8 @@ const iconMap = {
   bowl: `${UI}/hobby-meal-4x.png`,
   film: `${UI}/hobby-movie-4x.png`,
   star: `${UI}/hobby-star-4x.png`,
+  startea: `${UI}/hobby-startea-4x.png`,
+  cat: `${UI}/hobby-cat-4x.png`,
 } as const
 
 export default function Hobbies() {
@@ -25,7 +27,9 @@ export default function Hobbies() {
             brief={hobby.brief}
             images={hobby.images}
             hideCover={hobby.noCover}
-            cornerSprite={hobby.cornerSprite}
+            noExpand={hobby.noExpand}
+            coverContain={hobby.coverContain}
+            cornerAnim={season === 'winter' && hobby.cornerAnimWinter ? hobby.cornerAnimWinter : hobby.cornerAnim}
           />
         ))}
       </div>
