@@ -334,3 +334,11 @@
     background-attachment: scroll !important;
   }
 }
+
+/* 超窄屏（≤380px，如 iPhone SE 一代 320px）：木牌按钮边框收窄，
+   保证顶栏 [菜单] + 季节切换 4 键单行放下 */
+@media (max-width: 380px) {
+  .wood-btn {
+    border-width: 6px 8px;
+  }
+}

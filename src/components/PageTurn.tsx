@@ -33,23 +33,24 @@ export default function PageTurn() {
     <button
       type="button"
       onClick={() => navigate(to)}
-      className="wood-btn flex cursor-pointer items-center gap-2 px-3 py-2 sm:px-4"
+      className="wood-btn flex cursor-pointer items-center gap-1.5 px-2 py-1.5 sm:gap-2 sm:px-4 sm:py-2"
       aria-label={aria}
     >
       {iconFirst && (
-        <img src={icon} alt="" style={{ width: 26, height: 26, imageRendering: 'pixelated' }} />
+        <img src={icon} alt="" className="h-[22px] w-[22px] [image-rendering:pixelated] sm:h-[26px] sm:w-[26px]" />
       )}
-      <span className="font-pixel text-xs text-[#5a3a1e] sm:text-sm">{text}</span>
+      <span className="font-pixel text-[11px] text-[#5a3a1e] sm:text-sm">{text}</span>
       {!iconFirst && (
-        <img src={icon} alt="" style={{ width: 26, height: 26, imageRendering: 'pixelated' }} />
+        <img src={icon} alt="" className="h-[22px] w-[22px] [image-rendering:pixelated] sm:h-[26px] sm:w-[26px]" />
       )}
     </button>
   )
 
   return (
     // 吸底：内容超过一屏时翻页键自动贴在视口底部（z-20 压过卡片），内容短时停在自然位置；
-    // 关于我页由 Hero 用 absolute 容器包住，sticky 不生效、按首屏固定定位渲染
-    <div className="sticky bottom-4 z-20 flex items-center justify-center gap-6 pb-6 sm:gap-10">
+    // 关于我页由 Hero 用 absolute 容器包住，sticky 不生效、按首屏固定定位渲染；
+    // 竖屏右侧留白（pr-20）避开右下角 home/音乐键
+    <div className="sticky bottom-4 z-20 flex items-center justify-center gap-4 pb-6 pl-2 pr-20 sm:gap-10 sm:px-0">
       {prev && btn(prev.to, `${UI}/left.png`, `上一页 · ${prev.label}`, true, `上一页：${prev.label}`)}
       {next && btn(next.to, `${UI}/right.png`, `下一页 · ${next.label}`, false, `下一页：${next.label}`)}
     </div>

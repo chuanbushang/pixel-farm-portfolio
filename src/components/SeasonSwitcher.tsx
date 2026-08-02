@@ -16,7 +16,7 @@ const iconMap: Record<Season, string> = {
 
 export default function SeasonSwitcher({ season, onChange }: SeasonSwitcherProps) {
   return (
-    <div className="flex shrink-0 gap-1.5 sm:gap-2" role="group" aria-label="切换季节">
+    <div className="flex shrink-0 gap-1 sm:gap-2" role="group" aria-label="切换季节">
       {SEASON_ORDER.map((id) => {
         const cfg = SEASONS[id]
         const active = id === season
@@ -24,13 +24,17 @@ export default function SeasonSwitcher({ season, onChange }: SeasonSwitcherProps
           <button
             key={id}
             onClick={() => onChange(id)}
-            className="wood-btn flex flex-col items-center gap-1 px-2 py-1.5 sm:px-3 sm:py-2"
+            className="wood-btn flex flex-col items-center gap-0.5 px-1.5 py-1 sm:gap-1 sm:px-3 sm:py-2"
             style={active ? { filter: 'brightness(1.15) saturate(1.2)', transform: 'translateY(2px)' } : undefined}
             aria-pressed={active}
             title={`切换到${cfg.label}季`}
           >
-            <img src={iconMap[id]} alt="" style={{ width: 22, height: 22, imageRendering: 'pixelated' }} />
-            <span className="font-pixel text-xs text-[#5a3a1e]">{cfg.label}</span>
+            <img
+              src={iconMap[id]}
+              alt=""
+              className="h-[18px] w-[18px] [image-rendering:pixelated] sm:h-[22px] sm:w-[22px]"
+            />
+            <span className="font-pixel text-[10px] text-[#5a3a1e] sm:text-xs">{cfg.label}</span>
           </button>
         )
       })}

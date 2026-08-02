@@ -50,7 +50,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         {isHome ? (
           <>
             <span />
-            <div className="relative flex items-center gap-3">
+            <div className="relative flex flex-wrap items-center justify-end gap-2 sm:gap-3">
               {/* 季节体验提示：白色无背景闪烁（同款音乐提示样式），统一在左侧一行，竖屏小一号 */}
               {seasonHint && (
                 <span
