@@ -51,22 +51,14 @@ export default function Layout({ children }: { children: ReactNode }) {
           <>
             <span />
             <div className="relative flex items-center gap-3">
-              {/* 季节体验提示：白色无背景闪烁（同款音乐提示样式），桌面在左侧一行，竖屏悬浮在上方 */}
+              {/* 季节体验提示：白色无背景闪烁（同款音乐提示样式），统一在左侧一行，竖屏小一号 */}
               {seasonHint && (
-                <>
-                  <span
-                    className="animate-blink font-pixel hidden whitespace-nowrap text-sm text-white sm:block"
-                    style={{ textShadow: '1px 1px 0 #3b2a1a' }}
-                  >
-                    点击体验不同季节主题
-                  </span>
-                  <span
-                    className="animate-blink font-pixel absolute -top-8 right-0 whitespace-nowrap text-xs text-white sm:hidden"
-                    style={{ textShadow: '1px 1px 0 #3b2a1a' }}
-                  >
-                    点击体验不同季节主题
-                  </span>
-                </>
+                <span
+                  className="animate-blink font-pixel whitespace-nowrap text-xs text-white sm:text-sm"
+                  style={{ textShadow: '1px 1px 0 #3b2a1a' }}
+                >
+                  点击体验不同季节主题
+                </span>
               )}
               <SeasonSwitcher season={season} onChange={handleSeason} />
             </div>
