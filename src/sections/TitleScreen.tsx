@@ -30,7 +30,7 @@ export default function TitleScreen({ onNavigate }: TitleScreenProps) {
 
   return (
     <section
-      className="relative flex h-screen select-none flex-col items-center justify-center overflow-hidden px-4 pb-8 pt-20 transition-colors duration-700"
+      className="relative flex min-h-screen select-none flex-col items-center justify-center overflow-hidden px-4 pb-8 pt-24 transition-colors duration-700"
       style={{
         backgroundImage: `url(/assets/icons/buildings/HighlandsBackground_${SEASON_BG[season]}.png), linear-gradient(to bottom, ${cfg.titleTop}, ${cfg.titleMid}, ${cfg.titleBottom})`,
         backgroundSize: 'cover',
@@ -42,12 +42,12 @@ export default function TitleScreen({ onNavigate }: TitleScreenProps) {
       <img
         src="/assets/icons/ui/my-farm-web.png"
         alt={profile.farmName}
-        className="relative z-10 mx-4 mb-12 w-[min(92vw,560px)]"
+        className="relative z-10 mx-4 mb-8 w-[min(80vw,420px)] md:mb-12 md:w-[min(92vw,560px)]"
         draggable={false}
       />
 
       {/* 木头菜单按钮（第 8 块「音乐」弹出音乐设置，与「联系我」对称） */}
-      <nav className="relative z-10 grid grid-cols-2 gap-5 px-4 sm:grid-cols-4 md:gap-7">
+      <nav className="relative z-10 grid grid-cols-2 gap-4 px-4 sm:grid-cols-4 md:gap-7">
         {menu.map((item) => (
           <div key={item.id} className="relative">
             {/* 音乐提示：attention 星标（右上角外侧，呼吸缩放）+ 白色无背景闪烁文本，点击后消失 */}
@@ -73,7 +73,7 @@ export default function TitleScreen({ onNavigate }: TitleScreenProps) {
                   ? (setShowMusic((v) => !v), setMusicHint(false))
                   : onNavigate(item.id)
               }
-              className="wood-btn flex w-32 flex-col items-center gap-2 px-4 py-4 md:w-36"
+              className="wood-btn flex w-28 flex-col items-center gap-2 px-3 py-3 sm:w-32 sm:px-4 sm:py-4 md:w-36"
               style={
                 item.id === 'music' && showMusic
                   ? { filter: 'brightness(1.15) saturate(1.2)', transform: 'translateY(2px)' }

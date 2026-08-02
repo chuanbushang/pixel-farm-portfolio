@@ -131,7 +131,7 @@ export default function ExpandableItem({
         {hasImages ? (
           coverPortrait || coverContain ? (
             // 完整显示封面：不裁切原构图（竖版自动 / coverContain 强制），两侧衬奶油底
-            <div className="flex h-96 w-full items-center justify-center bg-[#e8d9b0]">
+            <div className="flex h-72 w-full items-center justify-center bg-[#e8d9b0] sm:h-96">
               <img
                 key={open ? images![imgIdx] : images![0]}
                 src={open ? images![imgIdx] : images![0]}
@@ -154,7 +154,7 @@ export default function ExpandableItem({
                 setCoverPortrait(img.naturalHeight > img.naturalWidth)
               }}
               style={coverPos ? { objectPosition: coverPos } : undefined}
-              className={`h-64 w-full object-cover ${noExpand ? '' : 'transition-all group-hover:scale-105 group-hover:opacity-50'}`}
+              className={`h-48 w-full object-cover sm:h-64 ${noExpand ? '' : 'transition-all group-hover:scale-105 group-hover:opacity-50'}`}
             />
           )
         ) : (
@@ -206,7 +206,7 @@ export default function ExpandableItem({
                   ◀
                 </button>
               )}
-              <div className="relative flex h-80 min-w-0 flex-1 items-center justify-center border-2 border-[#6b4423] bg-[#e8d9b0]">
+              <div className="relative flex h-56 min-w-0 flex-1 items-center justify-center border-2 border-[#6b4423] bg-[#e8d9b0] sm:h-80">
                 <img
                   src={images![imgIdx]}
                   alt={`${title} 图 ${imgIdx + 1}`}
@@ -242,7 +242,7 @@ export default function ExpandableItem({
           必须 createPortal 到 body：卡片 article 悬停带 transform，会把 fixed 灯箱困进卡片层叠上下文导致闪烁 */}
       {zoomOpen && hasImages && createPortal(
         <div
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 p-6"
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 p-3 sm:p-6"
           onClick={() => setZoomOpen(false)}
         >
           <img
@@ -268,7 +268,7 @@ export default function ExpandableItem({
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); manualSwitch(imgIdx - 1) }}
-                className="wood-btn absolute left-4 top-1/2 -translate-y-1/2 cursor-pointer px-3 py-2 font-pixel text-lg text-[#5a3a1e]"
+                className="wood-btn absolute left-2 top-1/2 -translate-y-1/2 cursor-pointer px-2 py-1 font-pixel text-base text-[#5a3a1e] sm:left-4 sm:px-3 sm:py-2 sm:text-lg"
                 aria-label="上一张"
               >
                 ◀
@@ -276,7 +276,7 @@ export default function ExpandableItem({
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); manualSwitch(imgIdx + 1) }}
-                className="wood-btn absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer px-3 py-2 font-pixel text-lg text-[#5a3a1e]"
+                className="wood-btn absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer px-2 py-1 font-pixel text-base text-[#5a3a1e] sm:right-4 sm:px-3 sm:py-2 sm:text-lg"
                 aria-label="下一张"
               >
                 ▶

@@ -325,3 +325,12 @@
 .animate-frames7 {
   animation: px-frames7 1.05s step-end infinite;
 }
+
+/* ============ 竖屏（手机）适配 ============ */
+/* iOS Safari 不支持 background-attachment: fixed，会把背景拉成整页高度导致画面错位，
+   移动端改为 scroll（桌面端保持 fixed 视差不变） */
+@media (max-width: 767px) {
+  .farm-bg {
+    background-attachment: scroll !important;
+  }
+}

@@ -18,10 +18,10 @@ export default function Hero({ season }: HeroProps) {
       <PixelArt rows={cloud.rows} palette={cloud.palette} scale={3} className="animate-drift absolute top-[30%] opacity-60" style={{ animationDuration: '105s', animationDelay: '-50s' }} />
       <PixelArt rows={cloud.rows} palette={cloud.palette} scale={4} className="animate-drift absolute top-[6%] opacity-75" style={{ animationDuration: '90s', animationDelay: '-25s' }} />
 
-      {/* 星露谷对话界面：左侧对话框 + 右侧肖像面板 */}
-      <div className="relative z-10 mx-4 mt-8 flex w-full max-w-3xl items-stretch gap-4">
+      {/* 星露谷对话界面：左侧对话框 + 右侧肖像面板；竖屏改为上下堆叠防文字挤压 */}
+      <div className="relative z-10 mx-4 mt-8 flex w-full max-w-3xl flex-col items-center gap-4 sm:flex-row sm:items-stretch">
         {/* 左：textBox 对话框 */}
-        <div className="stardew-textbox flex-1 p-6 md:p-7">
+        <div className="stardew-textbox w-full flex-1 p-5 sm:p-6 md:p-7">
           <div className="space-y-3">
             <p className="font-pixel text-base text-[#8b5a2b] md:text-lg">{profile.title}</p>
             <p className="font-pixel text-sm text-[#6b4423]">

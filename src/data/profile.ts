@@ -216,7 +216,7 @@ export interface Hobby {
 }
 
 export const hobbies: Hobby[] = [
-  { icon: 'startea', title: '友谊', brief: 'FRIENDSHIP✌', images: [
+  { icon: 'startea', title: '社交', brief: 'FRIENDSHIP✌', images: [
     '/assets/material/friendship/web/friendship5.jpg',
     '/assets/material/friendship/web/friendship4.jpg',
     '/assets/material/friendship/web/friendship1.jpg',
