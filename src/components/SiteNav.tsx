@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { NavLink } from 'react-router'
 import SeasonSwitcher from './SeasonSwitcher'
 import type { Season } from '../data/seasons'
-import { useIsMobile } from '../lib/useIsMobile'
+import { useIsNarrow } from '../lib/useIsMobile'
 
 const UI = '/assets/icons/ui'
 const links = [
@@ -41,9 +41,9 @@ interface SiteNavProps {
  * 竖屏：第一行固定为 [菜单]…[季节切换]，点开菜单后导航以带背景的面板整排出现在下一行（不浮在文字上） */
 export default function SiteNav({ season, onChangeSeason }: SiteNavProps) {
   const [open, setOpen] = useState(false)
-  const isMobile = useIsMobile()
+  const isNarrow = useIsNarrow()
   // 面板（带底纹背景）只在竖屏且菜单展开时出现；横屏导航永远平铺无背景
-  const showPanel = open && isMobile
+  const showPanel = open && isNarrow
 
   return (
     <>
@@ -51,7 +51,7 @@ export default function SiteNav({ season, onChangeSeason }: SiteNavProps) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="wood-btn flex cursor-pointer flex-col items-center gap-1 px-2.5 py-1.5 sm:hidden"
+        className="wood-btn flex cursor-pointer flex-col items-center gap-1 px-2.5 py-1.5 lg:hidden"
         aria-expanded={open}
         aria-label="展开导航菜单"
       >
@@ -64,7 +64,7 @@ export default function SiteNav({ season, onChangeSeason }: SiteNavProps) {
 
       {/* 导航排：竖屏默认隐藏，菜单展开时以带底纹面板整排显示；横屏常显平铺 */}
       <nav
-        className={`${showPanel ? 'stardew-textbox flex' : 'hidden'} order-3 w-full flex-wrap gap-2 p-2 sm:order-none sm:flex sm:w-auto sm:min-w-0 sm:flex-1 sm:p-0`}
+        className={`${showPanel ? 'stardew-textbox flex' : 'hidden'} order-3 w-full flex-wrap gap-2 p-2 lg:order-none lg:flex lg:w-auto lg:min-w-0 lg:flex-1 lg:p-0`}
       >
         {links.map((link) => (
           <NavBtn key={link.to} {...link} onClick={() => setOpen(false)} />

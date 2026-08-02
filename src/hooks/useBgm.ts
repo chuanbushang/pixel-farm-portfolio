@@ -134,25 +134,45 @@ export function useBgm(season: Season) {
   }, [])
 
   // 进网站自动播放尝试：不改动 sourceRef（被浏览器拦截时保持文件源，等首次手势再正式 play）
-  const tryAutoplay = useCallback(async (): Promise<boolean> => {
+  // 三级结果：'played' 直接出声；'muted' 静音起播（微信/ Safari 普遍允许），首次手势取消静音；'blocked' 等手势播放
+  const tryAutoplay = useCallback(async (): Promise<'played' | 'muted' | 'blocked'> => {
     const audio = audioRef.current
     if (sourceRef.current === 'file' && audio && audio.src) {
       try {
         await audio.play()
         setPlaying(true)
-        return true
+        return 'played'
       } catch {
-        return false
+        // 继续尝试静音起播
+      }
+      try {
+        audio.muted = true
+        await audio.play()
+        setPlaying(true)
+        return 'muted'
+      } catch {
+        audio.muted = false
+        return 'blocked'
       }
     }
     try {
       await synth.play()
       setPlaying(true)
-      return true
+      return 'played'
     } catch {
-      return false
+      return 'blocked'
     }
   }, [synth])
 
-  return { playing, play, pause, toggle, volume, setVolume, defaultMode, toggleDefaultMode, tryAutoplay }
+  // 首次手势时恢复：静音起播的取消静音，被拦截的正式播放
+  const resumeFromAutoplay = useCallback(async () => {
+    const audio = audioRef.current
+    if (audio && audio.muted) {
+      audio.muted = false
+      return
+    }
+    await play()
+  }, [play])
+
+  return { playing, play, pause, toggle, volume, setVolume, defaultMode, toggleDefaultMode, tryAutoplay, resumeFromAutoplay }
 }

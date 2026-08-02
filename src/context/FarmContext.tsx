@@ -4,9 +4,19 @@ import { SEASONS, type Season, type SeasonConfig } from '../data/seasons'
 
 const STORAGE_KEY = 'farm-season'
 
+/** 按现实月份推导季节：3-5 春 / 6-8 夏 / 9-11 秋 / 12-2 冬 */
+function seasonByDate(): Season {
+  const m = new Date().getMonth() + 1
+  if (m >= 3 && m <= 5) return 'spring'
+  if (m >= 6 && m <= 8) return 'summer'
+  if (m >= 9 && m <= 11) return 'autumn'
+  return 'winter'
+}
+
 function loadSeason(): Season {
   const saved = window.localStorage.getItem(STORAGE_KEY)
-  return saved && saved in SEASONS ? (saved as Season) : 'spring'
+  // 有记忆用手动选择；首次访问按现实季节初始化
+  return saved && saved in SEASONS ? (saved as Season) : seasonByDate()
 }
 
 interface FarmState {
@@ -27,18 +37,25 @@ export function FarmProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem(STORAGE_KEY, season)
   }, [season])
 
-  // 进网站自动播放音乐：先直接尝试；被浏览器拦截则等首次点击/按键时补播（一次性）
+  // 进网站自动播放音乐：先直接尝试（可能静音起播）；手势监听提前注册，
+  // 首次点击/按键时取消静音或补播（一次性）
   useEffect(() => {
     let cancelled = false
+    let settled = false
     const onGesture = () => {
       window.removeEventListener('pointerdown', onGesture)
       window.removeEventListener('keydown', onGesture)
-      if (!cancelled) void music.play().catch(() => {})
+      if (cancelled || settled) return
+      settled = true
+      void music.resumeFromAutoplay().catch(() => {})
     }
-    void music.tryAutoplay().then((ok) => {
-      if (cancelled || ok) return
-      window.addEventListener('pointerdown', onGesture)
-      window.addEventListener('keydown', onGesture)
+    window.addEventListener('pointerdown', onGesture)
+    window.addEventListener('keydown', onGesture)
+    void music.tryAutoplay().then((result) => {
+      if (cancelled || result !== 'played') return
+      settled = true
+      window.removeEventListener('pointerdown', onGesture)
+      window.removeEventListener('keydown', onGesture)
     })
     return () => {
       cancelled = true
