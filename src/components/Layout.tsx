@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { useState } from 'react'
 import { useLocation } from 'react-router'
 import PixelArt from './PixelArt'
 import { cloud } from './sprites'
@@ -18,6 +19,12 @@ export default function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation()
   const isHome = pathname === '/'
   const isMobile = useIsMobile()
+  // 季节体验提示（仅主页）：诱导首次点击完成手势解锁音乐；点一次消失，刷新重现（不持久化）
+  const [seasonHint, setSeasonHint] = useState(true)
+  const handleSeason = (s: typeof season) => {
+    setSeason(s)
+    setSeasonHint(false)
+  }
 
   return (
     <div
@@ -38,12 +45,31 @@ export default function Layout({ children }: { children: ReactNode }) {
         </>
       )}
 
-      {/* 顶栏：主页只显示季节切换；内页为 [菜单]…[季节切换]（导航已并入 SiteNav，竖屏收成菜单面板） */}
+      {/* 顶栏：主页只显示季节切换（带体验提示）；内页为 [菜单]…[季节切换]（导航已并入 SiteNav，竖屏收成菜单面板） */}
       <div className="fixed inset-x-0 top-0 z-50 flex flex-wrap items-start justify-between gap-2 p-3 md:gap-3 md:p-4">
         {isHome ? (
           <>
             <span />
-            <SeasonSwitcher season={season} onChange={setSeason} />
+            <div className="relative flex items-center gap-3">
+              {/* 季节体验提示：白色无背景闪烁（同款音乐提示样式），桌面在左侧一行，竖屏悬浮在上方 */}
+              {seasonHint && (
+                <>
+                  <span
+                    className="animate-blink font-pixel hidden whitespace-nowrap text-sm text-white sm:block"
+                    style={{ textShadow: '1px 1px 0 #3b2a1a' }}
+                  >
+                    点击体验不同季节主题
+                  </span>
+                  <span
+                    className="animate-blink font-pixel absolute -top-8 right-0 whitespace-nowrap text-xs text-white sm:hidden"
+                    style={{ textShadow: '1px 1px 0 #3b2a1a' }}
+                  >
+                    点击体验不同季节主题
+                  </span>
+                </>
+              )}
+              <SeasonSwitcher season={season} onChange={handleSeason} />
+            </div>
           </>
         ) : (
           <SiteNav season={season} onChangeSeason={setSeason} />
