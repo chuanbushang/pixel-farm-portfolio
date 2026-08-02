@@ -1,4 +1,5 @@
 import Hero from '../sections/Hero'
+import PageTurn from '../components/PageTurn'
 import { useFarm } from '../context/FarmContext'
 import { profile } from '../data/profile'
 import { grassBackground } from '../lib/grass'
@@ -12,6 +13,9 @@ export default function AboutPage() {
       <div id="about">
         <Hero season={cfg} />
       </div>
+
+      {/* 页尾翻页键（第一页只有「下一页」） */}
+      <PageTurn />
 
       {/* 页脚草地（随季节变色） */}
       <footer className="relative">
