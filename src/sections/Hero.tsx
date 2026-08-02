@@ -1,6 +1,7 @@
 import PixelArt from '../components/PixelArt'
 import GroundDecor from '../components/GroundDecor'
 import PortraitUpload from '../components/PortraitUpload'
+import PageTurn from '../components/PageTurn'
 import { cloud } from '../components/sprites'
 import { profile } from '../data/profile'
 import { grassBackground } from '../lib/grass'
@@ -40,9 +41,9 @@ export default function Hero({ season }: HeroProps) {
         </div>
       </div>
 
-      {/* 滚动提示 */}
-      <div className="absolute bottom-20 left-1/2 z-10 -translate-x-1/2 text-center">
-        <p className="animate-hop font-pixel text-2xl text-[#fff7dd]" style={{ textShadow: '2px 2px 0 #6b4423' }}>▼</p>
+      {/* 翻页键：首屏可见（草地上方），替代原滚动提示▼——关于我页底部仅页脚无需下滑 */}
+      <div className="absolute bottom-[4.5rem] left-0 right-0 z-10">
+        <PageTurn />
       </div>
 
       {/* 地面四季装饰 */}

@@ -1,10 +1,9 @@
 import Hero from '../sections/Hero'
-import PageTurn from '../components/PageTurn'
 import { useFarm } from '../context/FarmContext'
 import { profile } from '../data/profile'
 import { grassBackground } from '../lib/grass'
 
-/** 关于我页面：角色卡 + 地面四季装饰 + 页脚草地 */
+/** 关于我页面：角色卡 + 地面四季装饰 + 页脚草地（翻页键在 Hero 内部，首屏可见） */
 export default function AboutPage() {
   const { cfg } = useFarm()
 
@@ -13,9 +12,6 @@ export default function AboutPage() {
       <div id="about">
         <Hero season={cfg} />
       </div>
-
-      {/* 页尾翻页键（第一页只有「下一页」） */}
-      <PageTurn />
 
       {/* 页脚草地（随季节变色） */}
       <footer className="relative">

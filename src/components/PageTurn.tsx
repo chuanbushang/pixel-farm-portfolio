@@ -47,7 +47,9 @@ export default function PageTurn() {
   )
 
   return (
-    <div className="relative z-10 flex items-center justify-center gap-6 pb-6 sm:gap-10">
+    // 吸底：内容超过一屏时翻页键自动贴在视口底部（z-20 压过卡片），内容短时停在自然位置；
+    // 关于我页由 Hero 用 absolute 容器包住，sticky 不生效、按首屏固定定位渲染
+    <div className="sticky bottom-4 z-20 flex items-center justify-center gap-6 pb-6 sm:gap-10">
       {prev && btn(prev.to, `${UI}/left.png`, `上一页 · ${prev.label}`, true, `上一页：${prev.label}`)}
       {next && btn(next.to, `${UI}/right.png`, `下一页 · ${next.label}`, false, `下一页：${next.label}`)}
     </div>
