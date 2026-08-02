@@ -81,7 +81,7 @@ export default function ExpandableItem({
   }
 
   return (
-    <article className="group relative border-4 border-[#6b4423] bg-[#fdf3d8] p-4 transition-transform hover:-translate-y-0.5">
+    <article className="group relative border-4 border-[#6b4423] bg-[#fdf3d8] p-3 transition-transform hover:-translate-y-0.5 sm:p-4">
       {/* 标题行 */}
       <div className="flex items-start gap-3">
         {(icon || iconImg) && (
@@ -136,6 +136,8 @@ export default function ExpandableItem({
                 key={open ? images![imgIdx] : images![0]}
                 src={open ? images![imgIdx] : images![0]}
                 alt={title}
+                loading="lazy"
+                decoding="async"
                 onLoad={(e) => {
                   const img = e.currentTarget
                   setCoverPortrait(img.naturalHeight > img.naturalWidth)
@@ -149,6 +151,8 @@ export default function ExpandableItem({
               key={open ? images![imgIdx] : images![0]}
               src={open ? images![imgIdx] : images![0]}
               alt={title}
+              loading="lazy"
+              decoding="async"
               onLoad={(e) => {
                 const img = e.currentTarget
                 setCoverPortrait(img.naturalHeight > img.naturalWidth)
@@ -210,6 +214,8 @@ export default function ExpandableItem({
                 <img
                   src={images![imgIdx]}
                   alt={`${title} 图 ${imgIdx + 1}`}
+                  loading="lazy"
+                  decoding="async"
                   onClick={() => setZoomOpen(true)}
                   title="点击查看原图"
                   className="h-full w-auto max-w-full cursor-zoom-in object-contain transition-opacity hover:opacity-80"

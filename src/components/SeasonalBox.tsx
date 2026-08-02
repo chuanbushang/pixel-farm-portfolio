@@ -147,7 +147,7 @@ export default function SeasonalBox({ season, label, children }: SeasonalBoxProp
         <PixelArt rows={holly.rows} palette={holly.palette} scale={2} className="absolute -right-1 -top-3 z-10 -scale-x-100" />
         {/* 绿白条纹内框 */}
         <div style={{ background: STRIPE_GREEN, padding: 3 }}>
-          <div className="stardew-textbox relative p-6 pt-8 md:p-8 md:pt-10">
+          <div className="stardew-textbox relative p-4 pt-7 sm:p-6 sm:pt-8 md:p-8 md:pt-10">
             {nameplate}
             {children}
           </div>
@@ -157,7 +157,7 @@ export default function SeasonalBox({ season, label, children }: SeasonalBoxProp
   }
 
   return (
-    <div className="stardew-textbox relative p-6 pt-8 md:p-8 md:pt-10">
+    <div className="stardew-textbox relative p-4 pt-7 sm:p-6 sm:pt-8 md:p-8 md:pt-10">
       {nameplate}
       {children}
       <div className="pointer-events-none absolute inset-0">

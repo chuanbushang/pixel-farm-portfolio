@@ -1,5 +1,6 @@
 interface SeasonParticlesProps {
   kind: 'petal' | 'none' | 'leaf' | 'snow'
+  light?: boolean // 竖屏轻量模式：只要远景层且数量减半
 }
 
 const COLORS: Record<string, string[]> = {
@@ -25,11 +26,13 @@ function makeItems(kind: string) {
   })
 }
 
-export default function SeasonParticles({ kind }: SeasonParticlesProps) {
+export default function SeasonParticles({ kind, light }: SeasonParticlesProps) {
   if (kind === 'none') return null
   const items = makeItems(kind)
-  const far = items.filter((it) => !it.near)
+  const allFar = items.filter((it) => !it.near)
   const near = items.filter((it) => it.near)
+  // 竖屏轻量模式：远景层取一半，近景层整层不渲染（省 GPU 合成开销）
+  const far = light ? allFar.filter((_, i) => i % 2 === 0) : allFar
 
   const renderItem = (item: (typeof items)[number], i: number) => {
     // 春季：leaves.png 第一行原版粉色花瓣贴图（11 片，单体 ≤10px）
@@ -100,10 +103,12 @@ export default function SeasonParticles({ kind }: SeasonParticlesProps) {
       <div className="pointer-events-none fixed inset-0 z-[5] overflow-hidden" aria-hidden>
         {far.map(renderItem)}
       </div>
-      {/* 近景层：内容之上，更大更快 */}
-      <div className="pointer-events-none fixed inset-0 z-[15] overflow-hidden" aria-hidden>
-        {near.map(renderItem)}
-      </div>
+      {/* 近景层：内容之上，更大更快（竖屏轻量模式不渲染） */}
+      {!light && (
+        <div className="pointer-events-none fixed inset-0 z-[15] overflow-hidden" aria-hidden>
+          {near.map(renderItem)}
+        </div>
+      )}
     </>
   )
 }
