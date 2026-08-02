@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router'
 import { FarmProvider } from './context/FarmContext'
 import Layout from './components/Layout'
+import ScrollToTop from './components/ScrollToTop'
 import HomePage from './pages/HomePage'
 import AboutPage from './pages/AboutPage'
 import SkillsPage from './pages/SkillsPage'
@@ -13,6 +14,7 @@ import ContactPage from './pages/ContactPage'
 export default function App() {
   return (
     <FarmProvider>
+      <ScrollToTop />
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />

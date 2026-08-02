@@ -38,10 +38,16 @@ export default function Layout({ children }: { children: ReactNode }) {
         </>
       )}
 
-      {/* 顶栏：导航（主页隐藏，大牌子已提供跳转） + 季节切换同一弹性行；窄屏允许换行防挤压 */}
+      {/* 顶栏：主页只显示季节切换；内页为 [菜单]…[季节切换]（导航已并入 SiteNav，竖屏收成菜单面板） */}
       <div className="fixed inset-x-0 top-0 z-50 flex flex-wrap items-start justify-between gap-2 p-3 md:gap-3 md:p-4">
-        {isHome ? <span /> : <SiteNav />}
-        <SeasonSwitcher season={season} onChange={setSeason} />
+        {isHome ? (
+          <>
+            <span />
+            <SeasonSwitcher season={season} onChange={setSeason} />
+          </>
+        ) : (
+          <SiteNav season={season} onChangeSeason={setSeason} />
+        )}
       </div>
       <SeasonParticles kind={cfg.particle} light={isMobile} />
       {season === 'summer' && !isMobile && <Butterflies />}

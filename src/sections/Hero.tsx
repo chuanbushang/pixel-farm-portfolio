@@ -12,7 +12,7 @@ interface HeroProps {
 
 export default function Hero({ season }: HeroProps) {
   return (
-    <header className="relative flex min-h-screen items-center justify-center overflow-hidden pb-52">
+    <header className="relative flex min-h-screen items-center justify-center overflow-hidden pb-52 pt-24 sm:pt-16">
       {/* 天空装饰（无太阳） */}
       <PixelArt rows={cloud.rows} palette={cloud.palette} scale={5} className="animate-drift absolute top-[15%] opacity-90" style={{ animationDuration: '75s' }} />
       <PixelArt rows={cloud.rows} palette={cloud.palette} scale={3} className="animate-drift absolute top-[30%] opacity-60" style={{ animationDuration: '105s', animationDelay: '-50s' }} />
