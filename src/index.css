@@ -132,6 +132,15 @@
   animation: px-blink 1.1s steps(1) infinite;
 }
 
+/* 渐显渐隐（季节 / 音乐提示文本，柔和慢速） */
+@keyframes px-fade {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.15; }
+}
+.animate-fade {
+  animation: px-fade 2.8s ease-in-out infinite;
+}
+
 /* 呼吸缩放（音乐提示小红点） */
 @keyframes px-breathe {
   0%, 100% { transform: scale(1); }
