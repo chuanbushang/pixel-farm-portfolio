@@ -60,10 +60,12 @@ export default function TitleScreen({ onNavigate }: TitleScreenProps) {
                   style={{ width: 10, height: 10, imageRendering: 'pixelated' }}
                 />
                 <span
-                  className="animate-blink font-pixel absolute -bottom-8 right-0 z-20 whitespace-nowrap text-xs text-white"
+                  className="animate-blink font-pixel absolute -top-10 right-0 z-20 whitespace-nowrap text-right text-xs leading-4 text-white"
                   style={{ textShadow: '1px 1px 0 #3b2a1a' }}
                 >
-                  点击此处设置音乐
+                  点击此处
+                  <br />
+                  设置音乐
                 </span>
               </>
             )}
